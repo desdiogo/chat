@@ -1,0 +1,22 @@
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    networks:
+      - chat
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+    volumes:
+      - chatredis:/data
+networks:
+  chat:
+    driver: bridge
+
+volumes:
+  chatredis:
+    driver: local
