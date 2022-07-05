@@ -10,8 +10,8 @@ interface EnvironmentVariables {
   MAIL_PORT: number;
   MAIL_FROM: string;
   PORT: number;
-  REDIS_URL: string;
   REDIS_HOST: string;
   REDIS_PORT: number;
-  DEV_MODE: boolean;
+  REDIS_PASSWORD: string;
+  REDIS_USER: string;
 }

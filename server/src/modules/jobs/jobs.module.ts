@@ -14,7 +14,10 @@ import { MailModule } from '../mail/mail.module';
         configService: ConfigService<EnvironmentVariables, true>,
       ) => ({
         redis: {
-          path: configService.get('REDIS_URL', { infer: true }),
+          host: configService.get('REDIS_HOST', { infer: true }),
+          port: configService.get('REDIS_PORT', { infer: true }),
+          password: configService.get('REDIS_PASSWORD', { infer: true }),
+          username: configService.get('REDIS_USER', { infer: true }),
         },
       }),
     }),
