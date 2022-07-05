@@ -1,12 +1,12 @@
 <template>
   <q-page class="flex column justify-center items-center">
-    <q-card q-card class="q-pa-lg my-card" style="width: 380px">
+    <q-card q-card class="q-pa-lg" style="width: 380px">
       <q-form class="q-gutter-md" @submit.prevent.stop="onSubmit">
         <q-input
           ref="nameRef"
           v-model="form.name"
           outlined
-          label="Route"
+          label="Name"
           lazy-rules
           :rules="rules.name"
         />
@@ -57,7 +57,7 @@ import type { SignupResponseError } from "@/types";
 import { notify } from "@/services";
 import { capitalize } from "lodash";
 import { useRouter } from "vue-router";
-import { Route } from "@/enums";
+import { Message, Route } from "@/enums";
 
 interface InputValidation {
   validate: () => boolean;
@@ -111,6 +111,10 @@ async function onSubmit() {
     notify.success(response.message);
   } catch (err) {
     const error = err as SignupResponseError;
+
+    if (!error?.message) {
+      return notify.warning(Message.SystemError);
+    }
 
     if (typeof error.message === "string") {
       return notify.error(capitalize(error.message));

@@ -7,7 +7,7 @@ import {
   Request,
   Get,
   Body,
-  Query,
+  Headers,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -18,6 +18,7 @@ import { UserFromJwt } from './models/user-from-jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { GetCurrentUser } from './decorators/get-current-user.decorator';
 import { RtJwtAuthGuard } from './guards/rt-jwt-auth.guard';
+import { ConfirmEmailDto } from './dto/confirm-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,9 +26,12 @@ export class AuthController {
 
   @Post('signup')
   @IsPublic()
-  signup(@Body() createUserDto: CreateUserDto) {
+  signup(
+    @Body() createUserDto: CreateUserDto,
+    @Headers('origin') origin: string,
+  ) {
     delete createUserDto.passwordConfirmation;
-    return this.authService.signup(createUserDto);
+    return this.authService.signup(createUserDto, origin);
   }
 
   @Post('signin')
@@ -49,10 +53,10 @@ export class AuthController {
     return user;
   }
 
-  @Get('confirm-email')
-  @IsPublic()
-  confirmEmail(@Query('token') token: string) {
-    return this.authService.confirmEmail(token);
+  @Post('confirm-email')
+  @HttpCode(HttpStatus.OK)
+  confirmEmail(@CurrentUser() user: UserFromJwt) {
+    return this.authService.confirmEmail(user);
   }
 
   @Post('refresh-token')

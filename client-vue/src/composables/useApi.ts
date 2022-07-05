@@ -10,6 +10,8 @@ import type {
   MeResponseError,
   RefreshTokenResponseSuccess,
   RefreshTokenResponseError,
+  ConfirmEmailResponseSuccess,
+  ConfirmEmailResponseError,
 } from "@/types";
 import { EndPointsApi } from "@/enums";
 import type { AxiosError } from "axios";
@@ -17,14 +19,6 @@ import { useTokenStore } from "@/stores";
 
 export function useApi() {
   const tokens = useTokenStore();
-
-  function configHeader(token: string | null) {
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-  }
 
   async function signup(data: Signup) {
     try {
@@ -83,11 +77,29 @@ export function useApi() {
       throw error.response?.data;
     }
   }
+  async function confirmEmail(token: string) {
+    try {
+      const response = await api.post<ConfirmEmailResponseSuccess>(
+        EndPointsApi.ConfirmEmail,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<ConfirmEmailResponseError>;
+      throw error.response?.data;
+    }
+  }
 
   return {
     signup,
     sigin,
     me,
     postRefreshToken,
+    confirmEmail,
   };
 }

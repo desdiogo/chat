@@ -110,18 +110,25 @@ const { postRefreshToken } = useApi();
 const { setTokens } = useToken();
 const router = useRouter();
 
-onMounted(() => {
+function userIsAuthenticated() {
   setInterval(async () => {
-    try {
-      const { accessToken, refreshToken } = await postRefreshToken();
-      token.setTokens(accessToken, refreshToken);
-      setTokens(accessToken, refreshToken);
-    } catch {
-      token.setTokens("", "");
-      setTokens("", "");
-      auth.isAuthenticatedFalsy();
-      router.push({ name: Route.Signin });
+
+    if (auth.isAuthenticated) {
+      try {
+        const { accessToken, refreshToken } = await postRefreshToken();
+        token.setTokens(accessToken, refreshToken);
+        setTokens(accessToken, refreshToken);
+      } catch {
+        token.setTokens("", "");
+        setTokens("", "");
+        auth.isAuthenticatedFalsy();
+        router.push({ name: Route.Signin });
+      }
     }
   }, Time.Hour);
+}
+
+onMounted(() => {
+  userIsAuthenticated();
 });
 </script>

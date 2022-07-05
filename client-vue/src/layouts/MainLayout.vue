@@ -44,11 +44,11 @@ async function getUser() {
 }
 
 onMounted(() => {
-  const { accessToken, refreshToken } = getTokens();
-
-  if (accessToken && refreshToken) {
-    tokens.getTokens(accessToken, refreshToken);
-    getUser();
-  }
+  // const { accessToken, refreshToken } = getTokens();
+  //
+  // if (accessToken && refreshToken) {
+  //   tokens.getTokens(accessToken, refreshToken);
+  //   getUser();
+  // }
 });
 </script>

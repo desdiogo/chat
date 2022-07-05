@@ -20,7 +20,7 @@ export class AuthService {
     private readonly repository: UsersRepository,
   ) {}
 
-  async signup(createUserDto: CreateUserDto) {
+  async signup(createUserDto: CreateUserDto, origin: string) {
     createUserDto.password = await this.hashString(createUserDto.password);
     const user = await this.repository.create(createUserDto);
     const token = await this.jwtService.signAsync(user, {
@@ -34,7 +34,8 @@ export class AuthService {
       template: 'confirm-email',
       context: {
         token,
-        route: 'auth/confirm-email',
+        origin,
+        route: 'confirm-email',
       },
     };
 
@@ -96,23 +97,11 @@ export class AuthService {
     };
   }
 
-  async verifyToken(token: string) {
-    try {
-      return this.jwtService.verifyAsync<UserPayload>(token, {
-        secret: this.configService.get('JWT_SECRET', { infer: true }),
-      });
-    } catch (err) {
-      const error = err as Error;
-      throw new UnauthorizedError(error.message);
-    }
-  }
-
   async hashString(data: string) {
     return argon.hash(data, { saltLength: 10 });
   }
 
-  async confirmEmail(token: string) {
-    const user = await this.verifyToken(token);
+  async confirmEmail(user: UserFromJwt) {
     await this.repository.updateEmailVerifiedAt(user.id);
     return {
       message: 'Email confirmed successfully',

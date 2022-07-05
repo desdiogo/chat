@@ -23,6 +23,11 @@ export const routes: RouteRecordRaw[] = [
         name: Route.Signin,
         component: () => import("@/views/SigninView.vue"),
       },
+      {
+        path: Path.ConfirmEmail,
+        name: Route.ConfirmEmail,
+        component: () => import("@/views/ConfirmEmailView.vue"),
+      },
     ],
   },
 ];

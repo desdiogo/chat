@@ -39,7 +39,7 @@ import { useApi } from "@/composables";
 import { notify } from "@/services";
 import { capitalize } from "lodash";
 import { useRouter } from "vue-router";
-import { Route } from "@/enums";
+import {Message, Route} from "@/enums";
 import type { SigninResponseError } from "@/types";
 import { useAuthStore, useTokenStore } from "@/stores";
 import { useToken } from "@/composables";
@@ -91,6 +91,10 @@ async function onSubmit() {
   } catch (err) {
     buttonLoading.value = false;
     const error = err as SigninResponseError;
+
+    if (!error?.message) {
+      return notify.warning(Message.SystemError);
+    }
 
     if (typeof error.message === "string") {
       return notify.error(capitalize(error.message));
