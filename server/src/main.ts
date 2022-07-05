@@ -5,13 +5,14 @@ import { NotFoundInterceptor } from './errors/interceptors/not-found.interceptor
 import { UnauthorizedInterceptor } from './errors/interceptors/unauthorized.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { site } from './constants/site';
 
 const configService = new ConfigService<EnvironmentVariables, true>();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://app.desdiogo.com'],
+    origin: site,
   });
   app.useGlobalPipes(
     new ValidationPipe({
