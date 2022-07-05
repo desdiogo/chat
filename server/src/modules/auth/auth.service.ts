@@ -29,7 +29,7 @@ export class AuthService {
     });
 
     const mail = {
-      to: 'diogo@desdiogo.com',
+      to: user.email,
       subject: 'Chat - Confirm email',
       template: 'confirm-email',
       context: {
