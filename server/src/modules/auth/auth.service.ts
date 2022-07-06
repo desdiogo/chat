@@ -61,18 +61,34 @@ export class AuthService {
 
   async getTokens(user: UserFromJwt): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(user, {
-        expiresIn: this.configService.get('JWT_EXPIRATION_TIME', {
-          infer: true,
-        }),
-        secret: this.configService.get('JWT_SECRET', { infer: true }),
-      }),
-      this.jwtService.sign(user, {
-        expiresIn: this.configService.get('RT_JWT_EXPIRATION_TIME', {
-          infer: true,
-        }),
-        secret: this.configService.get('RT_JWT_SECRET', { infer: true }),
-      }),
+      this.jwtService.signAsync(
+        {
+          sub: user.id,
+          email: user.email,
+          name: user.name,
+          emailVerifiedAt: user.emailVerifiedAt,
+        },
+        {
+          expiresIn: this.configService.get('JWT_EXPIRATION_TIME', {
+            infer: true,
+          }),
+          secret: this.configService.get('JWT_SECRET', { infer: true }),
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          sub: user.id,
+          email: user.email,
+          name: user.name,
+          emailVerifiedAt: user.emailVerifiedAt,
+        },
+        {
+          expiresIn: this.configService.get('RT_JWT_EXPIRATION_TIME', {
+            infer: true,
+          }),
+          secret: this.configService.get('RT_JWT_SECRET', { infer: true }),
+        },
+      ),
     ]);
 
     return {

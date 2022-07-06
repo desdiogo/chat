@@ -4,4 +4,5 @@ export enum EndPointsApi {
   Me = "auth/me",
   RefreshToken = "auth/refresh-token",
   ConfirmEmail = "auth/confirm-email",
+  Logout = "auth/logout",
 }

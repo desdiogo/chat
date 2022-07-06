@@ -28,6 +28,7 @@ export class RtJwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
     if (!refreshToken) throw new ForbiddenException('Refresh token malformed');
 
     return {
+      id: payload.sub,
       ...payload,
       refreshToken,
     };

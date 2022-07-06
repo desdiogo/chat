@@ -42,7 +42,8 @@
             label="Signup"
             type="submit"
             color="secondary"
-            :disable="formHasError"
+            :disable="formHasError && buttonLoading"
+            :loading="buttonLoading"
           />
         </div>
       </q-form>
@@ -64,7 +65,7 @@ interface InputValidation {
   hasError: boolean;
 }
 
-const { signup } = useApi();
+const { useSignUp } = useApi();
 const router = useRouter();
 
 const form = ref({
@@ -78,6 +79,8 @@ const nameRef = ref<InputValidation | null>(null);
 const emailRef = ref<InputValidation | null>(null);
 const passwordRef = ref<InputValidation | null>(null);
 const passwordConfirmationRef = ref<InputValidation | null>(null);
+
+const buttonLoading = ref(false);
 
 const rules = ref({
   name: [(val: string) => (val && val.length > 0) || "Email is mandatory"],
@@ -106,10 +109,12 @@ const formHasError = computed(() => {
 
 async function onSubmit() {
   try {
-    const response = await signup(form.value);
+    buttonLoading.value = true;
+    const response = await useSignUp(form.value);
     await router.push({ name: Route.Signin });
     notify.success(response.message);
   } catch (err) {
+    buttonLoading.value = false;
     const error = err as SignupResponseError;
 
     if (!error?.message) {

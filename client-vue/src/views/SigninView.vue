@@ -21,7 +21,7 @@
         />
         <div class="row justify-end">
           <q-btn
-            label="Signin"
+            label="SignIn"
             type="submit"
             color="secondary"
             :disable="formHasError && buttonLoading"
@@ -39,7 +39,7 @@ import { useApi } from "@/composables";
 import { notify } from "@/services";
 import { capitalize } from "lodash";
 import { useRouter } from "vue-router";
-import {Message, Route} from "@/enums";
+import { Message, Route } from "@/enums";
 import type { SigninResponseError } from "@/types";
 import { useAuthStore, useTokenStore } from "@/stores";
 import { useToken } from "@/composables";
@@ -49,11 +49,11 @@ interface InputValidation {
   hasError: boolean;
 }
 
-const { sigin } = useApi();
+const { useSignIn } = useApi();
 const router = useRouter();
 const auth = useAuthStore();
 const tokens = useTokenStore();
-const { setTokens } = useToken()
+const { setTokens } = useToken();
 
 const form = ref({
   email: "",
@@ -82,7 +82,7 @@ const formHasError = computed(() => {
 async function onSubmit() {
   try {
     buttonLoading.value = true;
-    const { accessToken, refreshToken } = await sigin(form.value);
+    const { accessToken, refreshToken } = await useSignIn(form.value);
     auth.isAuthenticatedTruthy();
     tokens.setTokens(accessToken, refreshToken);
     setTokens(accessToken, refreshToken);

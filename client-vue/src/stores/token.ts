@@ -14,7 +14,7 @@ export const useTokenStore = defineStore("token", {
   }),
   actions: {
     setTokens(accessToken: string, refreshToken: string) {
-      this.accessToken = refreshToken;
+      this.accessToken = accessToken;
       this.refreshToken = refreshToken;
     },
     getTokens(accessToken: string | null, refreshToken: string | null) {

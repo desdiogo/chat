@@ -106,7 +106,7 @@ const offline = [
 
 const token = useTokenStore();
 const auth = useAuthStore();
-const { postRefreshToken } = useApi();
+const { useRefreshToken } = useApi();
 const { setTokens } = useToken();
 const router = useRouter();
 
@@ -115,7 +115,7 @@ function userIsAuthenticated() {
 
     if (auth.isAuthenticated) {
       try {
-        const { accessToken, refreshToken } = await postRefreshToken();
+        const { accessToken, refreshToken } = await useRefreshToken();
         token.setTokens(accessToken, refreshToken);
         setTokens(accessToken, refreshToken);
       } catch {

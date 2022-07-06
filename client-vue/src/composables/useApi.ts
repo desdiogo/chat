@@ -1,9 +1,9 @@
 import { api } from "@/utils";
 import type {
-  Signup,
+  SignUp,
   SignupResponseError,
   SignupResponseSuccess,
-  Signin,
+  SignIn,
   SigninResponseError,
   SigninResponseSuccess,
   MeResponseSuccess,
@@ -12,6 +12,8 @@ import type {
   RefreshTokenResponseError,
   ConfirmEmailResponseSuccess,
   ConfirmEmailResponseError,
+  LogoutResponseSuccess,
+  LogoutResponseError,
 } from "@/types";
 import { EndPointsApi } from "@/enums";
 import type { AxiosError } from "axios";
@@ -20,7 +22,7 @@ import { useTokenStore } from "@/stores";
 export function useApi() {
   const tokens = useTokenStore();
 
-  async function signup(data: Signup) {
+  async function useSignUp(data: SignUp) {
     try {
       const response = await api.post<SignupResponseSuccess>(
         EndPointsApi.SignUp,
@@ -33,7 +35,7 @@ export function useApi() {
     }
   }
 
-  async function sigin(data: Signin) {
+  async function useSignIn(data: SignIn) {
     try {
       const response = await api.post<SigninResponseSuccess>(
         EndPointsApi.SignIn,
@@ -46,7 +48,7 @@ export function useApi() {
     }
   }
 
-  async function me() {
+  async function useMe() {
     try {
       const response = await api.get<MeResponseSuccess>(EndPointsApi.Me, {
         headers: {
@@ -60,7 +62,7 @@ export function useApi() {
     }
   }
 
-  async function postRefreshToken() {
+  async function useRefreshToken() {
     try {
       const response = await api.post<RefreshTokenResponseSuccess>(
         EndPointsApi.RefreshToken,
@@ -77,7 +79,7 @@ export function useApi() {
       throw error.response?.data;
     }
   }
-  async function confirmEmail(token: string) {
+  async function useConfirmEmail(token: string) {
     try {
       const response = await api.post<ConfirmEmailResponseSuccess>(
         EndPointsApi.ConfirmEmail,
@@ -95,11 +97,30 @@ export function useApi() {
     }
   }
 
+  async function useLogout() {
+    try {
+      const response = await api.post<LogoutResponseSuccess>(
+        EndPointsApi.Logout,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${tokens.accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError<LogoutResponseError>;
+      throw error.response?.data;
+    }
+  }
+
   return {
-    signup,
-    sigin,
-    me,
-    postRefreshToken,
-    confirmEmail,
+    useSignUp,
+    useSignIn,
+    useMe,
+    useRefreshToken,
+    useConfirmEmail,
+    useLogout,
   };
 }

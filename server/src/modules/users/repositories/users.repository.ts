@@ -22,8 +22,10 @@ export class UsersRepository {
       select: {
         id: true,
         email: true,
+        name: true,
         createdAt: true,
         updatedAt: true,
+        emailVerifiedAt: true,
       },
     });
   }
@@ -36,6 +38,16 @@ export class UsersRepository {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+        hashRefreshToken: true,
+        emailVerifiedAt: true,
       },
     });
 
@@ -54,6 +66,14 @@ export class UsersRepository {
       data: {
         ...updateUserDto,
       },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+        emailVerifiedAt: true,
+        name: true,
+      },
     });
   }
 
@@ -64,6 +84,14 @@ export class UsersRepository {
       },
       data: {
         emailVerifiedAt: new Date(),
+      },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+        emailVerifiedAt: true,
+        name: true,
       },
     });
   }
@@ -79,6 +107,14 @@ export class UsersRepository {
       data: {
         hashRefreshToken,
       },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        emailVerifiedAt: true,
+      },
     });
   }
 
@@ -87,6 +123,14 @@ export class UsersRepository {
       where: {
         id,
       },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        emailVerifiedAt: true,
+      },
     });
   }
 
@@ -94,6 +138,14 @@ export class UsersRepository {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        emailVerifiedAt: true,
       },
     });
 
