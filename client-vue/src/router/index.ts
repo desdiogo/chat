@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "./routes";
 import { LocalStorage, Route } from "@/enums";
-import {useAuthStore, useTokenStore} from "@/stores";
+import { useAuthStore, useTokenStore } from "@/stores";
 import { useAuth } from "@/composables/useAuth";
 import { LocalStorage as Storage } from "quasar";
 
