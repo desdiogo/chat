@@ -27,4 +27,4 @@ coverage
 *.sw?
 
 #Env files
-.env*
+.env
