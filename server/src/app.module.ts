@@ -12,6 +12,7 @@ import {
   utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { CronModule } from './modules/cron/cron.module';
 import * as winston from 'winston';
 
 @Module({
@@ -44,6 +45,7 @@ import * as winston from 'winston';
     JobsModule,
     MailModule,
     PrismaModule,
+    CronModule,
   ],
   providers: [
     {

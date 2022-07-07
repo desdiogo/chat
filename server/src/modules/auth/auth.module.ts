@@ -7,11 +7,10 @@ import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
 import { JobsModule } from '../jobs/jobs.module';
-import { MailModule } from '../mail/mail.module';
 import { RtJwtStrategy } from './strategies/rt-jwt.strategy';
 
 @Module({
-  imports: [JwtModule.register({}), UsersModule, JobsModule, MailModule],
+  imports: [JwtModule.register({}), UsersModule, JobsModule],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, RtJwtStrategy],
   exports: [JwtModule],

@@ -11,15 +11,24 @@ datasource db {
 }
 
 model User {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   name             String
-  email            String   @unique
+  email            String    @unique
   password         String
   hashRefreshToken String?
   emailVerifiedAt  DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
 
   @@map("users")
+}
+
+model Mail {
+  id        String   @id @default(cuid())
+  from      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("mails")
 }

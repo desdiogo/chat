@@ -1,5 +1,4 @@
-import { UserPayload } from './models/user-payload';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {ConflictException, ForbiddenException, Injectable} from '@nestjs/common';
 import * as argon from 'argon2';
 import { UnauthorizedError } from '../../errors/types/unauthorized.error';
 import { JwtService } from '@nestjs/jwt';
@@ -9,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SendMailProducerService } from '../jobs/send-mail/send-mail-producer.service';
 import { Tokens } from './models/tokens';
-
+import {MailService} from "../mail/mail.service";
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,9 +17,16 @@ export class AuthService {
     private readonly configService: ConfigService<EnvironmentVariables, true>,
     private readonly mailerService: SendMailProducerService,
     private readonly repository: UsersRepository,
+    private readonly mailService: MailService,
   ) {}
 
   async signup(createUserDto: CreateUserDto, origin: string) {
+    const mailLimit = await this.mailService.exceededSendingLimit();
+
+    if (mailLimit) {
+      throw new ConflictException('Daily limit exceeded. Try tomorrow');
+    }
+
     createUserDto.password = await this.hashString(createUserDto.password);
     const user = await this.repository.create(createUserDto);
     const token = await this.jwtService.signAsync(user, {
